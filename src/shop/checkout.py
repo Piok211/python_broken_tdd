@@ -16,6 +16,7 @@ REQUIRED_LINE_KEYS = ("sku", "qty", "unit_price_kopecks")
 
 
 def validate_order(order):
+    REQUIRED_KEYS = {"sku", "qty", "price"}
     if not order:
         return False
 
@@ -25,6 +26,9 @@ def validate_order(order):
     for line in order["lines"]:
         if not line.get("sku"):
             return False
+        for key in REQUIRED_KEYS:
+            if key not in line:
+                return False
     return True
 
 
