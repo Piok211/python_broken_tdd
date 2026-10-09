@@ -15,6 +15,12 @@ TIER_DISCOUNTS = ((10, 5), (25, 10), (50, 15))
 REQUIRED_LINE_KEYS = ("sku", "qty", "unit_price_kopecks")
 
 
+def validate_order(order):
+    if not order:
+        return False
+    return True
+
+
 def validate_order(
     lines: list[dict[str, str]],
     promo_code: str = "",
