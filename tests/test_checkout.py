@@ -125,3 +125,7 @@ def test_vat_is_charged_on_the_discounted_sum() -> None:
 def test_empty_order_is_rejected():
     result = validate_order({})
     assert result is not True
+def test_empty_sku_is_rejected():
+    order = {"lines": [{"sku": "","qty": 1, "price": 10}]}
+    result = validate_order(order)
+    assert result is not True 
