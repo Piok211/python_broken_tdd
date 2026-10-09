@@ -18,6 +18,13 @@ REQUIRED_LINE_KEYS = ("sku", "qty", "unit_price_kopecks")
 def validate_order(order):
     if not order:
         return False
+
+    if "lines" not in order:
+        return False
+
+    for line in order["lines"]:
+        if not line.get("sku"):
+            return False
     return True
 
 
