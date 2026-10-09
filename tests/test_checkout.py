@@ -13,6 +13,8 @@ Run one test at a time while you work:
     uv run pytest tests/test_checkout.py -k tier -x
 """
 
+from src.shop.checkout import validate_order
+
 from shop.checkout import calculate_order_total, validate_order
 
 
@@ -120,3 +122,6 @@ def test_free_delivery_uses_discounted_subtotal() -> None:
 def test_vat_is_charged_on_the_discounted_sum() -> None:
     """Spec 4, steps 8-10: base = discounted subtotal + delivery."""
     ...
+def test_empty_order_is_rejected():
+    result = validate_order({})
+    assert result is not True
