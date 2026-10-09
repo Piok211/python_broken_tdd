@@ -129,3 +129,7 @@ def test_empty_sku_is_rejected():
     order = {"lines": [{"sku": "","qty": 1, "price": 10}]}
     result = validate_order(order)
     assert result is not True 
+def test_missing_line_key_is_rejected():
+    order = {"lines": [{"sku": "ABC", "price": 10}]}
+    result = validate_order(order)
+    assert result is not True
