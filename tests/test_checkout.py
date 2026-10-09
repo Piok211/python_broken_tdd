@@ -106,7 +106,11 @@ def test_promo_code_beats_tier_discount() -> None:
 
 def test_discount_is_capped_at_thirty_percent() -> None:
     """Spec 4, step 5: VIP35 gives 35%, but the cap is 30%. Compare with example 4."""
-    ...
+    def test_discount_is_capped_at_thirty_percent() -> None:
+    """Spec 4, step 5: VIP35 gives 35%, but the cap is 30%. Compare with example 4."""
+    order = {"total": 1000, "discount_percent": 35}
+    result = calculate_discount(order)
+    assert result == 300
 
 
 def test_delivery_is_charged_for_small_order() -> None:
@@ -133,3 +137,9 @@ def test_missing_line_key_is_rejected():
     order = {"lines": [{"sku": "ABC", "price": 10}]}
     result = validate_order(order)
     assert result is not True
+
+def test_discount_is_capped_at_thirty_percent():
+    """VIP35 gives 35%, but the cap is 30%."""
+    order = {"total": 1000, "discount_percent": 35}
+    result = calculate_discount(order)
+    assert result == 300 
