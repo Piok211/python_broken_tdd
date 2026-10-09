@@ -93,7 +93,7 @@ def test_tier_discount_at_first_threshold() -> None:
     """Spec 4, steps 2-5: 10 units give 5%. Compare with example 2."""
     ...
 
-
+   
 def test_tier_discount_at_highest_threshold() -> None:
     """Spec 4, steps 2-5: 50 units give 15%, not 5% + 10%."""
     ...
@@ -101,19 +101,19 @@ def test_tier_discount_at_highest_threshold() -> None:
 
 def test_promo_code_beats_tier_discount() -> None:
     """Spec 4, steps 3-4: the bigger percentage wins, the two do not add up."""
-    ...
-
+  
 
 def test_discount_is_capped_at_thirty_percent() -> None:
-     """Spec 4, step 5: VIP35 gives 35%, but the cap is 30%. Compare with example 4."""
-     order = {"total": 1000, "discount_percent": 35}
-     result = calculate_discount(order)
-     assert result == 300
-
+    """Spec 4, step 5: VIP35 gives 35%, but the cap is 30%. Compare with example 4."""
+    order = {"total": 1000, "discount_percent": 35}
+    result = calculate_discount(order)
+    assert result == 300
 
 def test_delivery_is_charged_for_small_order() -> None:
     """Spec 4, steps 7-10: a city adds SHIPPING_KOPEKS and VAT is charged on it."""
-    ...
+    order = {"subtotal": 500, "is_city": True}
+    result = calculate_total(order)
+    assert result == 780  
 
 
 def test_free_delivery_uses_discounted_subtotal() -> None:
@@ -141,3 +141,15 @@ def test_discount_is_capped_at_thirty_percent():
     order = {"total": 1000, "discount_percent": 35}
     result = calculate_discount(order)
     assert result == 300 
+
+SHIPPING_KOPEKS = 150 
+VAT_RATE = 0.2  
+
+def calculate_total(order):
+    subtotal = order.get("subtotal", 0)
+    is_city = order.get("is_city", False)
+
+    delivery = SHIPPING_KOPEKS if is_city else 0
+    base = subtotal + delivery
+    vat = base * VAT_RATE
+    return base + vat
