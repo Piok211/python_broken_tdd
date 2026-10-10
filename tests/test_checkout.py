@@ -13,9 +13,7 @@ Run one test at a time while you work:
     uv run pytest tests/test_checkout.py -k tier -x
 """
 
-from src.shop.checkout import validate_order
-
-from shop.checkout import calculate_order_total, validate_order
+from src.shop.checkout import validate_order,calculate_order_total,calculate_discount
 
 
 def line(sku: str = "SKU-1", qty: str = "1", unit_price_kopecks: str = "10000") -> dict[str, str]:
@@ -113,7 +111,7 @@ def test_delivery_is_charged_for_small_order() -> None:
     """Spec 4, steps 7-10: a city adds SHIPPING_KOPEKS and VAT is charged on it."""
     order = {"subtotal": 500, "is_city": True}
     result = calculate_total(order)
-    assert result == 780  
+    assert result == 780
 
 
 def test_free_delivery_uses_discounted_subtotal() -> None:

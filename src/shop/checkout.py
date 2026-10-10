@@ -66,6 +66,15 @@ def validate_order(
 
     return None
 
+def calculate_discount(order):
+    """Apply discount, capped at maximum 30%."""
+    total = order.get("total", 0)
+    discount_percent = order.get("discount_percent", 0)
+    max_discount = 30
+    actual_discount = min(discount_percent, max_discount)
+    discount_amount = total * actual_discount / 100
+    return discount_amount
+
 
 def calculate_order_total(
     lines: list[dict[str, str]],
