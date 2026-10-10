@@ -15,6 +15,23 @@ TIER_DISCOUNTS = ((10, 5), (25, 10), (50, 15))
 REQUIRED_LINE_KEYS = ("sku", "qty", "unit_price_kopecks")
 
 
+def validate_order(order):
+    REQUIRED_KEYS = {"sku", "qty", "price"}
+    if not order:
+        return False
+
+    if "lines" not in order:
+        return False
+
+    for line in order["lines"]:
+        if not line.get("sku"):
+            return False
+        for key in REQUIRED_KEYS:
+            if key not in line:
+                return False
+    return True
+
+
 def validate_order(
     lines: list[dict[str, str]],
     promo_code: str = "",
@@ -48,6 +65,15 @@ def validate_order(
         return "Shipping not available to this city"
 
     return None
+
+def calculate_discount(order):
+    """Apply discount, capped at maximum 30%."""
+    total = order.get("total", 0)
+    discount_percent = order.get("discount_percent", 0)
+    max_discount = 30
+    actual_discount = min(discount_percent, max_discount)
+    discount_amount = total * actual_discount / 100
+    return discount_amount
 
 
 def calculate_order_total(
